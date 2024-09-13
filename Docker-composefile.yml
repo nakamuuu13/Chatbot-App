@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./chatbot-ui
+    volumes:
+      - ./chatbot-ui:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./chatbot-server
+    volumes:
+      - ./chatbot-server:/app
+    ports:
+      - "5001:5000"
