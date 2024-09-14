@@ -8,15 +8,5 @@ docker-compose up --build
 Ctrl + C
 ```
 
-# Restart the container
-```
-docker-compose start
-```
-
-# Stop teh container(restart version)
-```
-docker-compose stop
-```
-
 # Docker reference
 [docker reference](https://matsuand.github.io/docs.docker.jp.onthefly/reference/)
