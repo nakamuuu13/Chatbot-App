@@ -18,4 +18,6 @@ RUN npm install @testing-library/react@13.4.0
 RUN npm install @testing-library/user-event@13.5.0
 RUN npm install web-vitals@2.1.4
 
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npm start > /app/logs/ui.log 2>&1 & tail -f /app/logs/ui.log"]
+
+# CMD ["sh", "-c", "npm start >> /app/logs/ui.log 2>&1 & tail -f /app/logs/ui.log"]

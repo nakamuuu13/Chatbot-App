@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 WORKDIR /app/src
 
-CMD ["python", "main.py"]
+CMD ["sh", "-c", "python main.py > /app/logs/app.log 2>&1 & tail -f /app/logs/app.log"]
