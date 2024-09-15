@@ -20,4 +20,5 @@ RUN npm install web-vitals@2.1.4
 
 CMD ["sh", "-c", "npm start > /app/logs/ui.log 2>&1 & tail -f /app/logs/ui.log"]
 
+# logging 上書き
 # CMD ["sh", "-c", "npm start >> /app/logs/ui.log 2>&1 & tail -f /app/logs/ui.log"]

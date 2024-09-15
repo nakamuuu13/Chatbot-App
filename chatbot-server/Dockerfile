@@ -9,3 +9,6 @@ RUN pip install -r requirements.txt
 WORKDIR /app/src
 
 CMD ["sh", "-c", "python main.py > /app/logs/app.log 2>&1 & tail -f /app/logs/app.log"]
+
+# logging 上書き
+# CMD ["sh", "-c", "python main.py >> /app/logs/app.log 2>&1 & tail -f /app/logs/app.log"]
