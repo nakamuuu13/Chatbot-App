@@ -1,28 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Login } from './components/pages/Login';
+
 import './App.css';
 
-import axios from 'axios';
-
-export function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    // FlaskバックエンドのエンドポイントにGETリクエストを送信
-    axios.get('http://localhost:5001/api/helloworld')
-      .then((response) => {
-        setMessage(response.data.message);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
-  }, []);
-
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>chatbot-ui</h1>
-        <p>{message}</p>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
