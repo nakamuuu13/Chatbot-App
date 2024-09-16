@@ -11,19 +11,6 @@ export const GET = async (endpoint) => {
         return { message: "エラーが発生しました" };
     }
 }
-    
-
-// export const GET = async (endpoint) => {
-//     await axios.get(API_URL + endpoint)
-//         .then((response) => {
-//             console.log('GET response : ', response.data.message);
-//             return response.data.message;
-//         })
-//         .catch((error) => {
-//             console.error('GET error : ', error);
-//             return { message: "エラーが発生しました" };
-//         });
-// }
 
 export const POST = async (endpoint, data) => {
     try {
