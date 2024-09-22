@@ -1,4 +1,4 @@
-import { ChatUiKit } from "../modules/ChatUiKit";
+import { ChatUiKit } from "../modules/chat/ChatUiKit";
 
 export const Chat = () => {
     return (

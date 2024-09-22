@@ -13,9 +13,15 @@ export const GET = async (endpoint) => {
 }
 
 export const POST = async (endpoint, data, { handleResponseMessage, handleResponseMessageStream }) => {
-    if (data.stream_response === true) {
+    if (data.response_type === "stream") {
         try {
-            const response = await axios.post(API_URL + endpoint, data);
+            const response = await fetch(API_URL + endpoint, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
             const reader = response.body.getReader();
             const decoder = new TextDecoder('utf-8');
     
@@ -24,7 +30,7 @@ export const POST = async (endpoint, data, { handleResponseMessage, handleRespon
             let firstResponse = false;
     
             while (!(chunk = await reader.read()).done) {
-                const text = decoder.decode(chunk.value, { stream: true });
+                const text = decoder.decode(chunk.value, { response_type: "stream" });
                 accumulatedText += text;
                 if (!firstResponse) {
                     handleResponseMessage(accumulatedText);

@@ -1,8 +1,8 @@
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Avatar } from '@chatscope/chat-ui-kit-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { sendMessage, responseMessage, responseMessageStream, setLoading } from '../../redux/actions/chatAction';
+import { sendMessage, responseMessage, responseMessageStream, setLoading } from '../../../redux/actions/chatAction';
 
-import { POST } from '../../apis/api';
+import { POST } from '../../../apis/api';
 
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import logo from './ai_logo.png';
@@ -53,14 +53,14 @@ export const ChatUiKit = () => {
         try {
             dispatch(setLoading(true));
             const data = { text: text,
-                           stream_response: true };
+                           response_type: "stream" };
             await POST("/api/chat/create_response", data, {
                 handleResponseMessage,
                 handleResponseMessageStream
             });
         } catch (error) {
-            console.error("handleReply error", error);
-            handleResponseMessage("エラーが発生しました。");
+            console.error("handleReplyStream error", error);
+            handleResponseMessage("Error from server");
         } finally {
             dispatch(setLoading(false));
         }
