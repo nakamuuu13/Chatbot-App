@@ -7,7 +7,7 @@ import { POST } from '../../../apis/api';
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import logo from './ai_logo.png';
 
-export const ChatUiKit = () => {
+export const ChatUiKit = ({ isRightSidebarOpen, isLeftSidebarOpen }) => {
     const dispatch = useDispatch();
     const { userMessages, aiMessages, isLoading } = useSelector((state) => state.chat);
 
@@ -79,8 +79,21 @@ export const ChatUiKit = () => {
         }
     };
 
+    // サイドバーの幅（固定値）
+    const sidebarWidth = 250; 
+
+    // 左右のマージンをサイドバーの開閉に応じて計算
+    const leftMargin = isLeftSidebarOpen ? `${sidebarWidth}px` : '0';
+    const rightMargin = isRightSidebarOpen ? `${sidebarWidth}px` : '0';
+
     return (
-        <div style={{ position: "relative", height: "700px", width: "100%" }}>
+        <div style={{ 
+            position: "relative", 
+            height: "700px", 
+            marginLeft: leftMargin, 
+            marginRight: rightMargin, 
+            width: `calc(100% - ${isLeftSidebarOpen ? sidebarWidth : 0}px - ${isRightSidebarOpen ? sidebarWidth : 0}px)`
+        }}>
             <MainContainer>
                 <ChatContainer>
                     <MessageList>

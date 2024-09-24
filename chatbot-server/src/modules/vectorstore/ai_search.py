@@ -219,6 +219,8 @@ class AiSearchManager:
         index_client.delete_index(index_name)
         print(f"Index '{index_name}' deleted.")
 
+        return None
+
 class AiSearchSkillsetManager:
     @staticmethod
     def create_skillset(
@@ -424,3 +426,4 @@ class AiSearchIndexerManager:
         indexer_client.delete_indexer(indexer_name)
         print(f"Indexer '{index_name}' deleted.")
         
+        return None
