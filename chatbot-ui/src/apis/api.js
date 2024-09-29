@@ -8,7 +8,7 @@ export const GET = async (endpoint) => {
         return response.data;
     } catch (error) {
         console.error('GET error : ', error);
-        return { message: "エラーが発生しました" };
+        return { message: "Error from server" };
     }
 }
 
@@ -41,7 +41,7 @@ export const POST = async (endpoint, data, { handleResponseMessage, handleRespon
             }
         } catch (error) {
             console.error("POST error for stream", error);
-            handleResponseMessage("エラーが発生しました。");
+            handleResponseMessage("Error from server");
         };
     } else {
         try {
@@ -49,7 +49,7 @@ export const POST = async (endpoint, data, { handleResponseMessage, handleRespon
             return response.data;
         } catch (error) {
             console.error('POST error : ', error);
-            return { message: "エラーが発生しました" };
+            return { message: "Error from server" };
         }
     }
 
