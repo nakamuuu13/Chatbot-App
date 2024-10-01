@@ -1,5 +1,5 @@
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Avatar } from '@chatscope/chat-ui-kit-react';
 import { useSelector, useDispatch } from 'react-redux';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Avatar } from '@chatscope/chat-ui-kit-react';
 import { sendMessage, responseMessage, responseMessageStream, setLoading } from '../../../redux/actions/chatAction';
 
 import { POST } from '../../../apis/api';
@@ -54,7 +54,7 @@ export const ChatUiKit = ({ isRightSidebarOpen, isLeftSidebarOpen }) => {
             dispatch(setLoading(true));
             const data = { text: text,
                            response_type: "stream" };
-            await POST("/api/chat/create_response", data, {
+            await POST("/api/chat/create_response_gpt_4o_mini", data, {
                 handleResponseMessage,
                 handleResponseMessageStream
             });
@@ -78,7 +78,7 @@ export const ChatUiKit = ({ isRightSidebarOpen, isLeftSidebarOpen }) => {
             messages.push(aiMessages[i]);
         }
     };
-
+    
     // サイドバーの幅（固定値）
     const sidebarWidth = 250; 
 
@@ -86,14 +86,17 @@ export const ChatUiKit = ({ isRightSidebarOpen, isLeftSidebarOpen }) => {
     const leftMargin = isLeftSidebarOpen ? `${sidebarWidth}px` : '0';
     const rightMargin = isRightSidebarOpen ? `${sidebarWidth}px` : '0';
 
+    // サイドバーの開閉に対応したstyle
+    const chatStyle = {
+        position: "relative",
+        height: "100vh",
+        marginLeft: leftMargin,
+        marginRight: rightMargin,
+        width: `calc(100% - ${isLeftSidebarOpen ? sidebarWidth : 0}px - ${isRightSidebarOpen ? sidebarWidth : 0}px)`
+    };
+
     return (
-        <div style={{ 
-            position: "relative", 
-            height: "700px", 
-            marginLeft: leftMargin, 
-            marginRight: rightMargin, 
-            width: `calc(100% - ${isLeftSidebarOpen ? sidebarWidth : 0}px - ${isRightSidebarOpen ? sidebarWidth : 0}px)`
-        }}>
+        <div style={chatStyle}>
             <MainContainer>
                 <ChatContainer>
                     <MessageList>
@@ -112,7 +115,7 @@ export const ChatUiKit = ({ isRightSidebarOpen, isLeftSidebarOpen }) => {
                         ))}
                     </MessageList>
                     <MessageInput
-                        placeholder="ご質問は何でしょうか？"
+                        placeholder="What is your question?"
                         attachButton={true}
                         onSend={handleSendMessage}
                         fancyScroll={false}

@@ -1,3 +1,6 @@
+import { NavLinks } from '../modules/navigation/NavLinks';
+import { Vectorstore } from '../modules/vectorstore/Vectorstore';
+
 import './../../App.css';
 
 
@@ -8,12 +11,7 @@ export const LeftSidebar = ({ toggleSidebar, isOpen }) => {
                 {isOpen ? '◀' : '▶'}
             </button>
             <div className="left-sidebar-content">
-                <h2>Left Sidebar</h2>
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                </ul>
+                <NavLinks />
             </div>
         </div>
     );
@@ -26,12 +24,7 @@ export const RightSidebar = ({ toggleSidebar, isOpen }) => {
                 {isOpen ? '▶' : '◀'}
             </button>
             <div className="right-sidebar-content">
-                <h2>Right Sidebar</h2>
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                </ul>
+                <Vectorstore />
             </div>
         </div>
     );

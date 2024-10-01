@@ -45,7 +45,7 @@
 }
 
 /* __________Navheader */
-.Nav-header {
+/* .Nav-header {
   background-color: #222;
   color: #fff;
   padding: 1rem;
@@ -79,12 +79,13 @@
 
 .nav-links li a:hover {
   color: #ffca28;
-}
+} */
 
 /* __________Sidebar */
 .right-sidebar {
   position: fixed;
-  top: 83px;
+  /* top: 83px; */
+  top: 0;
   right: 0;
   width: 250px;
   height: 100vh;
@@ -121,7 +122,8 @@
 
 .left-sidebar {
   position: fixed;
-  top: 83px;
+  /* top: 83px; */
+  top: 0%;
   left: 0;
   width: 250px;
   height: 100vh;
@@ -155,6 +157,37 @@
   padding: 5px 10px;
   transition: transform 0.3s ease;
 }
+
+/* __________NavLinks */
+
+.Nav-links-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Nav-logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+}
+
+.Nav-links-sidebar li {
+  margin-left: 1.5rem;
+  list-style: none;
+}
+
+.Nav-links-sidebar li a {
+  font-size: 20px;
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+
 
 
 /* __________Chat */

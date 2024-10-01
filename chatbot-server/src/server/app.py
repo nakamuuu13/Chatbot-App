@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, Response, stream_with_context
 from flask_cors import CORS
 
-from modules.chat.chat import ChatResponse
+from modules.chat.open_ai_chat import OpenAIChatResponse
 from modules.vectorstore.vectorstore import VectorstoreManager
 
 
@@ -13,7 +13,7 @@ def hello_world():
     return jsonify({"message": "Hello, World!"})
 
 
-@app.route("/api/chat/create_response", methods=["POST"])
+@app.route("/api/chat/create_response_gpt_4o_mini", methods=["POST"])
 def create_response():
     try :
         data = request.get_json()
@@ -22,7 +22,7 @@ def create_response():
         # max_tokens = data["max_tokens"]
         # temperature = data["temperature"]
         # response = ChatResponse.create_response(input_text, model_name, max_tokens, temperature)
-        return Response(stream_with_context(ChatResponse.create_response(input_text)), mimetype="text/event-stream")
+        return Response(stream_with_context(OpenAIChatResponse.create_response_gpt_4o_mini(input_text)), mimetype="text/event-stream")
     except Exception as e:
         print(e)
         response = Response("Error from create_response", status=500)

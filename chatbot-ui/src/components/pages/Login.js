@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Button from '@mui/material/Button';
 
 import { setLoginState } from '../../redux/actions/loginAction';
 
@@ -27,7 +28,17 @@ export const Login = () => {
             <header className="Login-header">
                 <img src={logo} className="Login-logo" alt="logo" />
                 <h1>Chatbot Application</h1>
-                <button className="Login-button" onClick={handleLogin}>Login</button>
+                <Button
+                    variant="contained"
+                    sx={{ 
+                        backgroundColor: 'grey', 
+                        '&:hover': { backgroundColor: 'darkgrey' },
+                        textTransform: 'none'
+                    }}
+                    onClick={handleLogin}
+                >
+                    Login
+                </Button>
             </header>
         </div>
     );

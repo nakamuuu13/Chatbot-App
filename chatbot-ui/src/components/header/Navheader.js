@@ -9,7 +9,6 @@ export const Navheader = () => {
             <Link to="/" className="Nav-logo">Chat App</Link>
             <ul className="nav-links">
                 <li><Link to="/chat">Chat</Link></li>
-                <li><Link to="/vectorstore">Vectorstore</Link></li>
             </ul>
         </div>
     )

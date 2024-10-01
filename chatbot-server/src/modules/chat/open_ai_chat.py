@@ -8,16 +8,16 @@ from dotenv import load_dotenv
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-class ChatResponse:
+class OpenAIChatResponse:
     @staticmethod
-    def create_response(
+    def create_response_gpt_4o_mini(
             input_text: str,
             model_name="gpt-4o-mini-2024-07-18",
             max_tokens=100,
             temperature=1.2
         ):
             """
-            入力文に対してLLMの回答文を作成する
+            入力文に対してGPT-4o-miniの回答文を作成する
             
             Args:
                 input_text (str): 入力文
