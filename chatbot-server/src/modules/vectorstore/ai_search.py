@@ -3,35 +3,53 @@ import os
 from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.identity import DefaultAzureCredential
+from azure.search.documents import SearchClient, SearchItemPaged
+from azure.search.documents.models import     VectorizableTextQuery
 from azure.search.documents.indexes import SearchIndexerClient, SearchIndexClient
+# インデックスおよびデータソース設定関連のインポート
 from azure.search.documents.indexes.models import (
-    NativeBlobSoftDeleteDeletionDetectionPolicy,
-    SearchIndexerDataContainer,
-    SearchIndexerDataSourceConnection,
-    SearchField,
-    SearchFieldDataType,
-    VectorSearch,
-    HnswAlgorithmConfiguration,
-    VectorSearchProfile,
-    AzureOpenAIVectorizer,
-    AzureOpenAIParameters,
-    SemanticConfiguration,
-    SemanticSearch,
-    SemanticPrioritizedFields,
-    SemanticField,
-    SearchIndex,
-    SplitSkill,
-    InputFieldMappingEntry,
-    OutputFieldMappingEntry,
-    AzureOpenAIEmbeddingSkill,
-    SearchIndexerIndexProjections,
-    SearchIndexerIndexProjectionSelector,
-    SearchIndexerIndexProjectionsParameters,
-    IndexProjectionMode,
-    SearchIndexerSkillset,
-    CognitiveServicesAccountKey,
-    SearchIndexer,
+    SearchField,  # インデックスのフィールドを定義するクラス
+    SearchFieldDataType,  # フィールドのデータ型 (例: String, Int32, Double など)
+    SearchIndex,  # インデックスのスキーマ全体を定義するクラス
+
+    SearchIndexerDataContainer,  # データソースからのデータを格納するコンテナの設定
+    SearchIndexerDataSourceConnection,  # データソース接続の設定 (例: Azure Blob Storage)
 )
+# インデクサー関連のインポート
+from azure.search.documents.indexes.models import (
+    NativeBlobSoftDeleteDeletionDetectionPolicy,  # Blob データの Soft Delete 検出ポリシー設定
+    SearchIndexer,  # データのインデクシングと管理を行うインデクサー
+    SearchIndexerIndexProjections,  # インデクサーの投影機能設定 (別のインデックスに投影)
+    SearchIndexerIndexProjectionSelector,  # 投影を行うフィールドを選択するセレクター
+    SearchIndexerIndexProjectionsParameters,  # 投影設定のパラメーター (例: データの変換ロジック)
+    IndexProjectionMode,  # 投影モード (例: AllFields, SpecifiedFields)
+)
+# スキルセット関連 (Cognitive Skills) のインポート
+from azure.search.documents.indexes.models import (
+    AzureOpenAIEmbeddingSkill,  # Azure OpenAI を使用したテキストエンベディングスキル
+    CognitiveServicesAccountKey,  # Cognitive Services の認証キー設定
+    InputFieldMappingEntry,  # スキルの入力フィールドマッピングを定義するクラス
+    OutputFieldMappingEntry,  # スキルの出力フィールドマッピングを定義するクラス
+    SearchIndexerSkillset,  # インデクサーに適用するスキルセットを定義
+    SplitSkill,  # テキストを複数のフィールドに分割するためのスキル (例: 文や段落単位での分割)
+)
+# ベクトル検索関連のインポート
+from azure.search.documents.indexes.models import (
+    AzureOpenAIVectorizer,  # OpenAI を使用してテキストをベクトルに変換する設定
+    AzureOpenAIParameters,  # OpenAI を使用する際のパラメーター設定 (例: モデルの選択)
+    HnswAlgorithmConfiguration,  # HNSW (Hierarchical Navigable Small World) アルゴリズム設定
+    VectorSearch,  # ベクトル検索の設定および管理を行うクラス
+    VectorSearchProfile,  # ベクトル検索プロファイル (例: 距離計算の設定など)
+)
+# セマンティック検索関連のインポート
+from azure.search.documents.indexes.models import (
+    SemanticConfiguration,  # セマンティック検索全体の設定を定義するクラス
+    SemanticField,  # セマンティック検索対象のフィールドを定義するクラス
+    SemanticPrioritizedFields,  # セマンティック検索で優先するフィールドの設定
+    SemanticSearch,  # セマンティック検索を管理するクラス
+)
+
+
 
 load_dotenv(override=True)
 endpoint: str = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
@@ -75,7 +93,9 @@ class AiSearchManager:
             data_deletion_policy=NativeBlobSoftDeleteDeletionDetectionPolicy()
         )
         data_source: SearchIndexer = indexer_client.create_or_update_data_source_connection(data_source_connection)
-        print(f"Connected to container '{blob_container_name}' and index '{index_name}'")
+        print("---------------------------")
+        print(f"Connected to container '{blob_container_name}' and index '{index_name}'!")
+        print("---------------------------")
 
         return data_source
 
@@ -106,7 +126,9 @@ class AiSearchManager:
         )
 
         search_index: SearchIndex = index_client.create_or_update_index(index)
+        print("---------------------------")
         print(f"Index '{search_index.name}' created.")
+        print("---------------------------")
 
         return search_index
 
@@ -130,7 +152,9 @@ class AiSearchManager:
             SearchField(name="chunk", type=SearchFieldDataType.String, sortable=False, filterable=False, facetable=False),
             SearchField(name="vector", type=SearchFieldDataType.Collection(SearchFieldDataType.Single), vector_search_dimensions=azure_openai_model_dimensions, vector_search_profile_name="myHnswProfile"),
         ]
+        print("---------------------------")
         print("Index fields created.")
+        print("---------------------------")
 
         return fields
 
@@ -170,7 +194,9 @@ class AiSearchManager:
                 ),
             ],
         )
+        print("---------------------------")
         print("Vector search created.")
+        print("---------------------------")
 
         return vector_search
 
@@ -198,7 +224,9 @@ class AiSearchManager:
         semantic_search: SemanticSearch = SemanticSearch(
                configurations=[semantic_config],
         )
+        print("---------------------------")
         print(f"Semantic configuration '{name}' created.")
+        print("---------------------------")
 
         return semantic_search
     
@@ -217,7 +245,10 @@ class AiSearchManager:
 
         index_client: SearchIndexClient = SearchIndexClient(endpoint, credential)
         index_client.delete_index(index_name)
+
+        print("---------------------------")
         print(f"Index '{index_name}' deleted.")
+        print("---------------------------")
 
         return None
 
@@ -255,7 +286,10 @@ class AiSearchSkillsetManager:
         )
         client = SearchIndexerClient(endpoint, credential)
         client.create_or_update_skillset(skillset)
+
+        print("---------------------------")
         print(f"Skillset '{skillset.name}' created.")
+        print("---------------------------")
 
         return None
 
@@ -283,7 +317,9 @@ class AiSearchSkillsetManager:
                 OutputFieldMappingEntry(name="textItems", target_name="pages")
             ]
         )
+        print("---------------------------")
         print("Split skill created.")
+        print("---------------------------")
 
         return split_skill
 
@@ -314,7 +350,10 @@ class AiSearchSkillsetManager:
                 OutputFieldMappingEntry(name="embedding", target_name="vector")
             ]
         )
+
+        print("---------------------------")
         print("Embedding skill created.")
+        print("---------------------------")
 
         return embedding_skill
     
@@ -348,7 +387,10 @@ class AiSearchSkillsetManager:
                 projection_mode=IndexProjectionMode.SKIP_INDEXING_PARENT_DOCUMENTS
             )
         )
+
+        print("---------------------------")
         print("Index projection created.")
+        print("---------------------------")
 
         return index_projections
     
@@ -364,8 +406,12 @@ class AiSearchSkillsetManager:
             cognitive_services_account (CognitiveServicesAccountKey): Cognitive Service のアカウント
         """
 
+        use_ocr: bool = False
         cognitive_services_account: CognitiveServicesAccountKey = CognitiveServicesAccountKey(key=azure_ai_services_key) if use_ocr else None
+        
+        print("---------------------------")
         print("Cognitive services account created.")
+        print("---------------------------")
 
         return cognitive_services_account
     
@@ -403,7 +449,10 @@ class AiSearchIndexerManager:
         indexer_client: SearchIndexerClient = SearchIndexerClient(endpoint, credential)
         search_indexer: SearchIndexer = indexer_client.create_or_update_indexer(indexer)
         indexer_client.run_indexer(indexer_name)
+
+        print("---------------------------")
         print(f"Indexer '{indexer_name}' created.")
+        print("---------------------------")
 
         return None
     
@@ -424,6 +473,50 @@ class AiSearchIndexerManager:
         indexer_name = f"{index_name}-indexer"
         indexer_client: SearchIndexerClient = SearchIndexerClient(endpoint, credential)
         indexer_client.delete_indexer(indexer_name)
+
+        print("---------------------------")
         print(f"Indexer '{index_name}' deleted.")
+        print("---------------------------")
         
         return None
+
+class AiSearchSearchManager:
+    @staticmethod
+    def search(
+            index_name: str,
+            query: str
+    ):
+        """
+        検索を実行する
+
+        Args:
+            index_name (str): AI Search のインデックス名
+            query (str): 検索クエリ
+
+        Returns:
+            search_results (SearchResults): 検索結果
+        """
+        
+        search_client: SearchClient = SearchClient(endpoint, index_name, credential)
+        vector_query: VectorizableTextQuery = VectorizableTextQuery(text=query, k_nearest_neighbors=50, fields="vector")
+
+        # Perform vector search  
+        results: SearchItemPaged = search_client.search(  
+            search_text=query,  
+            vector_queries= [vector_query],
+            select=["parent_id", "title", "chunk_id", "chunk"],
+            top=3
+        )
+
+        result_array: list = []
+        print("Search Results: ---------------------------")
+        # Print the search results  
+        for result in results:
+            print(f"Score: {result['@search.score']}")
+            print(f"Content: {result['title']}")
+            print(f"Chunk: {result['chunk']}")
+            print("\n")
+            result_array.append(result)
+
+        search_results = result_array[0]
+        return search_results

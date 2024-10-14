@@ -9,12 +9,9 @@ from modules.vectorstore.blob_storage import BlobStorageManager
 from modules.vectorstore.ai_search import (
     AiSearchManager,
     AiSearchSkillsetManager,
-    AiSearchIndexerManager
+    AiSearchIndexerManager,
+    AiSearchSearchManager,
 )
-
-load_dotenv(override=True)
-index_name = os.getenv("AZURE_SEARCH_INDEX", "sample-vec")
-blob_container_name = os.getenv("BLOB_CONTAINER_NAME", "sample-blob")
 
 class VectorstoreManager:
     @staticmethod
@@ -36,11 +33,16 @@ class VectorstoreManager:
             None
 
         """
+
+        index_name = f"{name}-index"
+        index_description = description
+        blob_container_name = f"{name}-container"
+
         BlobStorageManager.upload_documents(
             files=files,
             blob_container_name=blob_container_name
         )
-        AiSearchManager.connect_to_container_index(
+        data_source = AiSearchManager.connect_to_container_index(
             blob_container_name=blob_container_name,
             index_name=index_name
         )
@@ -52,7 +54,7 @@ class VectorstoreManager:
         )
         AiSearchIndexerManager.create_indexer(
             index_name=index_name,
-            data_source=seearch_index
+            data_source=data_source
         )
         print(f"Vectorstore '{name}' created.")
 
@@ -72,6 +74,9 @@ class VectorstoreManager:
             None
         """
 
+        index_name = f"{name}-index"
+        blob_container_name = f"{name}-container"
+
         BlobStorageManager.delete_container(
             blob_container_name=blob_container_name
         )
@@ -84,3 +89,28 @@ class VectorstoreManager:
         print(f"Vectorstore '{name}' deleted.")
 
         return None
+    
+    @staticmethod
+    def search_vectorstore(
+            name: str,
+            query: str
+    ):
+        """
+        検索を実行する
+
+        Args:
+            name (str): ベクトルストアの名前
+            query (str): 検索クエリ
+
+        Returns:
+            search_results (SearchResults): 検索結果
+        """
+
+        index_name = f"{name}-index"
+
+        search_results = AiSearchSearchManager.search(
+            index_name=index_name,
+            query=query
+        )
+
+        return search_results

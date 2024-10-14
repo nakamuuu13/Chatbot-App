@@ -1,7 +1,10 @@
-import { DIALOG_OPEN } from "../actions/vectorStoreAction";
+import { DIALOG_OPEN, FILES, NAME, CREATE } from "../actions/vectorStoreAction";
 
 const initialState = {
-    dialogOpen: false
+    dialogOpen: false,
+    files: [],
+    name: '',
+    create: false
 };
 
 export const vectorStoreReducer = (state = initialState, action) => {
@@ -10,6 +13,21 @@ export const vectorStoreReducer = (state = initialState, action) => {
             return {
                 ...state,
                 dialogOpen: action.payload
+            };
+        case FILES:
+            return {
+                ...state,
+                files: action.payload
+            };
+        case NAME:
+            return {
+                ...state,
+                name: action.payload
+            };
+        case CREATE:
+            return {
+                ...state,
+                create: action.payload
             };
         default:
             return state;

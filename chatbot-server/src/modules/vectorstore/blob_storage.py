@@ -29,11 +29,17 @@ class BlobStorageManager:
         if not container_client.exists():   # コンテナが存在しない場合は作成
             container_client.create_container()
             
+        # for file in files:
+        #     with open(file, "rb") as data:
+        #         name = os.path.basename(file)
+        #         if not container_client.get_blob_client(name).exists():
+        #             container_client.upload_blob(name=name, data=data)
+
         for file in files:
-            with open(file, "rb") as data:
-                name = os.path.basename(file)
-                if not container_client.get_blob_client(name).exists():
-                    container_client.upload_blob(name=name, data=data)
+            name = file.filename
+            if not container_client.get_blob_client(name).exists():
+                container_client.upload_blob(name=name, data=file.stream)
+
         print(f"Setup {len(files)} files in {blob_container_name} container.")
     
     @staticmethod
