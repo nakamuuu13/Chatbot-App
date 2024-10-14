@@ -2,8 +2,13 @@ FROM python:3.11.4
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y poppler-utils && \
+    apt-get clean
+
 COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip
+RUN 
 RUN pip install -r requirements.txt
 
 WORKDIR /app/src

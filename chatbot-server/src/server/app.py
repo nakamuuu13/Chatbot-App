@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 from modules.chat.open_ai_chat import OpenAIChatResponse
 from modules.vectorstore.vectorstore import VectorstoreManager
+from modules.document_structuring.document_structuring import DocumentStructuring
 
 
 app = Flask(__name__)
@@ -35,11 +36,16 @@ def create_vectorstore():
 
         files: list = request.files.getlist("files")
 
-        VectorstoreManager.create_vectorstore(
+        # VectorstoreManager.create_vectorstore(
+        #     files=files,
+        #     name=name,
+        #     description=description
+        # )
+        DocumentStructuring.invoke(
             files=files,
-            name=name,
-            description=description
+            name=name
         )
+
 
         return jsonify({"message": "Created vectorstore"})
     except Exception as e:
@@ -80,3 +86,13 @@ def search_vectorstore():
     except Exception as e:
         print(e)
         return Response("Error from search_vectorstore", status=500)
+
+@app.route("/api/test", methods=["GET"])
+def create_document_structuring():
+    try :
+        resuponse = DocumentStructuring.invoke()
+        
+        return jsonify(resuponse)
+    except Exception as e:
+        print(e)
+        return Response("Error from create_document_structuring", status=500)

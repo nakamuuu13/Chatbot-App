@@ -12,6 +12,7 @@ from modules.vectorstore.ai_search import (
     AiSearchIndexerManager,
     AiSearchSearchManager,
 )
+from modules.document_structuring.document_structuring import DocumentStructuring
 
 class VectorstoreManager:
     @staticmethod
@@ -34,30 +35,40 @@ class VectorstoreManager:
 
         """
 
-        index_name = f"{name}-index"
-        index_description = description
-        blob_container_name = f"{name}-container"
+        # index_name = f"{name}-index"
+        # index_description = description
+        # blob_container_name = f"{name}-container"
 
-        BlobStorageManager.upload_documents(
-            files=files,
-            blob_container_name=blob_container_name
-        )
-        data_source = AiSearchManager.connect_to_container_index(
-            blob_container_name=blob_container_name,
-            index_name=index_name
-        )
-        seearch_index: SearchIndex = AiSearchManager.create_index(
-            index_name=index_name
-        )
-        AiSearchSkillsetManager.create_skillset(
-            index_name=index_name
-        )
-        AiSearchIndexerManager.create_indexer(
-            index_name=index_name,
-            data_source=data_source
-        )
-        print(f"Vectorstore '{name}' created.")
+        # BlobStorageManager.upload_documents(
+        #     files=files,
+        #     blob_container_name=blob_container_name
+        # )
+        # data_source = AiSearchManager.connect_to_container_index(
+        #     blob_container_name=blob_container_name,
+        #     index_name=index_name
+        # )
+        # seearch_index: SearchIndex = AiSearchManager.create_index(
+        #     index_name=index_name
+        # )
+        # AiSearchSkillsetManager.create_skillset(
+        #     index_name=index_name
+        # )
+        # AiSearchIndexerManager.create_indexer(
+        #     index_name=index_name,
+        #     data_source=data_source
+        # )
+        # print(f"Vectorstore '{name}' created.")
 
+        try :
+        
+            DocumentStructuring.invoke(
+                files=files,
+                name=name
+            )
+
+        except Exception as e:
+            print(e)
+        
         return None
     
     @staticmethod
